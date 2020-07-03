@@ -34,17 +34,28 @@ public class inicioControler extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
+		
+		
+		String nombre= (request.getParameter("nombre")== null) ? "":request.getParameter("nombre") ;
+		String pmin=   (request.getParameter("pmin")== null) ? "": request.getParameter("pmin");
+		String pmax= (request.getParameter("pmax")== null) ? "": request.getParameter("pmax");
+		String fabricante= (request.getParameter("fabricante")== null)?"":request.getParameter("fabricante") ;
 		ArrayList<Producto> productos = new ArrayList<Producto>();
 
 		try {
 			LOG.trace("entramos al controlador de inicio");
-
+			int precioMinimo =Integer.parseInt(pmin);
+			int precioMaximo= Integer.parseInt(pmax);
+			int idfabricante= Integer.parseInt(fabricante);
+			
+			
+			
+			LOG.debug(String.format("filtro busqueda nombre=%s precioMinimo=%s precioMaximo=%s fabricante=%s", nombre,pmin,pmax,fabricante));
 			// productos.add(new Producto(1,"portatil", 667.8f));
 			// productos.add(new Producto(2,"portatil 15 pulgadas", 1000.69f));
 			// productos.add(new Producto(1,"portatil acer", 900.8f));
 
-			productos = dao.buscar("", 0, 0, 0);
+			productos = dao.buscar(nombre , precioMinimo, precioMaximo, idfabricante);
 
 		} catch (Exception e) {
 			LOG.error(e);

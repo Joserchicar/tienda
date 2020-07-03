@@ -74,9 +74,9 @@ public static synchronized ProductoDAO getInstance() {
 					 
 					 Fabricante f=new Fabricante();
 					f.setId(rs.getInt ("id"));
-					f.setNombre(rs.getString("nombre"));
+					f.setNombre(rs.getString("Fabricante_nombre"));
 					
-					p.setFabricante(fabricante);
+					p.setFabricante(f);
 					
 					 resultado.add(p);
 					
