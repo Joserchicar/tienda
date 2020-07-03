@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 
 import com.ipartek.formacion.modelo.ProductoDAO;
+import com.ipartek.formacion.modelo.pojo.FormularioBusqueda;
 import com.ipartek.formacion.modelo.pojo.Producto;
 
 
@@ -36,18 +37,21 @@ public class inicioControler extends HttpServlet {
 			throws ServletException, IOException {
 		
 		
-		String nombre= (request.getParameter("nombre")== null) ? "":request.getParameter("nombre") ;
-		String pmin=   (request.getParameter("pmin")== null) ? "": request.getParameter("pmin");
-		String pmax= (request.getParameter("pmax")== null) ? "": request.getParameter("pmax");
-		String fabricante= (request.getParameter("fabricante")== null)?"":request.getParameter("fabricante") ;
+		String nombre            =request.getParameter("nombre");
+		String pmin              = request.getParameter("pmin");
+		String pmax              = request.getParameter("pmax");
+		String fabricante        = request.getParameter("fabricante") ;
+		
 		ArrayList<Producto> productos = new ArrayList<Producto>();
-
+		FormularioBusqueda form = new FormularioBusqueda();
+		
+		
+		//(request.getParameter("fabricante")== null)?"":
 		try {
-			LOG.trace("entramos al controlador de inicio");
-			int precioMinimo =Integer.parseInt(pmin);
-			int precioMaximo= Integer.parseInt(pmax);
-			int idfabricante= Integer.parseInt(fabricante);
 			
+			LOG.trace("entramos al controlador de inicio");
+			
+			form = new FormularioBusqueda(nombre, pmin, pmax,fabricante);
 			
 			
 			LOG.debug(String.format("filtro busqueda nombre=%s precioMinimo=%s precioMaximo=%s fabricante=%s", nombre,pmin,pmax,fabricante));
@@ -55,13 +59,14 @@ public class inicioControler extends HttpServlet {
 			// productos.add(new Producto(2,"portatil 15 pulgadas", 1000.69f));
 			// productos.add(new Producto(1,"portatil acer", 900.8f));
 
-			productos = dao.buscar(nombre , precioMinimo, precioMaximo, idfabricante);
+			productos = dao.buscar(form.getNombre() ,form.getPrecioMin(),form.getPrecioMax(),form.getIdFabricante());
 
 		} catch (Exception e) {
 			LOG.error(e);
 
 		} finally {
 
+			request.setAttribute("formulario", form);
 			request.setAttribute("productos", productos);
 			request.getRequestDispatcher("index.jsp").forward(request, response);
 		}

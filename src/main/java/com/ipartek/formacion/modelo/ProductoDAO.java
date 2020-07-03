@@ -12,91 +12,93 @@ import com.ipartek.formacion.controller.inicioControler;
 import com.ipartek.formacion.modelo.pojo.Fabricante;
 import com.ipartek.formacion.modelo.pojo.Producto;
 
-
-
-
 public class ProductoDAO {
-	private static final Logger LOG = Logger.getLogger(ProductoDAO.class);
-	//TODO patron Singleton
+	private final static Logger LOG = Logger.getLogger(ProductoDAO.class);
 	
+	// TODO patron Singleton
+
 	/**
-	 * Busca productos segun los parametros indicados 
-	 * @param nombreProducto String busca la palabra 'nombreProducto' dentro del nombre del producto, si queremos todos pasar ""
-	 * @param precioMin float si no queremos filtrar pasar 0 o negativo
-	 * @param precioMax float si no queremos filtrar pasar 0 o negativo
-	 * @param idFabricante int identificador del fabricante, si queremos todos pasar un 0
-	 * @return listado de productos, si no encuentra nada una lista vacia pero inicializada
-	 * @throws SQLException 
-	 * @throws  
+	 * Busca productos segun los parametros indicados @param nombreProducto String
+	 * busca la palabra 'nombreProducto' dentro del nombre del producto, si queremos
+	 * todos pasar "" @param precioMin float si no queremos filtrar pasar 0 o
+	 * negativo @param precioMax float si no queremos filtrar pasar 0 o
+	 * negativo @param idFabricante int identificador del fabricante, si queremos
+	 * todos pasar un 0 @return listado de productos, si no encuentra nada una lista
+	 * vacia pero inicializada @throws SQLException @throws
 	 */
-	public static ProductoDAO INSTANCE=null;
-	
-public static synchronized ProductoDAO getInstance() {
-		
-		if ( INSTANCE == null ){
+	public static ProductoDAO INSTANCE = null;
+
+	public static synchronized ProductoDAO getInstance() {
+
+		if (INSTANCE == null) {
 			INSTANCE = new ProductoDAO();
 		}
-		
-		return INSTANCE;		
+
+		return INSTANCE;
 	}
 
+	public ArrayList<Producto> buscar(String nombreProducto, float precioMin, float precioMax, int idFabricante)
+			throws Exception {
 
-	
-	public ArrayList<Producto> ProductoDAO( String nombreProducto, float precioMin, float precioMax, int idFabricante ) throws Exception{
-		
-		
-		ArrayList<Producto> resultado = new ArrayList<Producto> ();
-		String sql = "SELECT p.id 'producto_id', p.nombre 'nombre',precio,descripcion,"
-		+"f.id 'fabricante_id', f.nombre 'fabricante_nombre'"
-				+ " FROM productos p INNER JOIN Fabricantes f fON p.id_fabricante=f.id  ORDER BY id DESC LIMIT 500;";
-		
+		ArrayList<Producto> resultado = new ArrayList<Producto>();
+
+		/*
+		 * -- esta es la sql original.-- String sql =
+		 * "SELECT p.id 'producto_id', p.nombre 'nombre',precio,descripcion,"
+		 * +"f.id 'fabricante_id', f.nombre 'fabricante_nombre'" +
+		 * " FROM productos p INNER JOIN Fabricantes f ON p.id_fabricante=f.id " +
+		 * " ORDER BY id DESC LIMIT 500;";
+		 *  -- incluimos en la siguiente las condiciones para cada uno de los filtros que queremos realizar.
+		 */
+
+		String sql = " SELECT " + "    p.id as 'producto_id', p.nombre as 'producto_nombre', precio, descripcion, "
+				+ "    f.id 'fabricante_id', f.nombre 'fabricante_nombre'  " + " FROM "
+				+ "    productos p INNER JOIN fabricantes f ON p.id_fabricante = f.id ";
+
+		String where = " WHERE p.nombre LIKE '%" + nombreProducto + "%' ";
+
+		if (idFabricante > 0) {
+			where += " AND p.id_fabricante = " + idFabricante + " ";
+		}
+
+		if (precioMin >= 0 && precioMax > 0) {
+			where += " AND precio >= " + precioMin + " AND precio <= " + precioMax + " ";
+		}
+
+		String order = " ORDER BY p.id DESC LIMIT 500;";
+
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
+
+			// TODO 1 mapear resto de campos
+			// TODO 2 Inner Join con Fabricante
+			// TODO 3 que funcione con todos los paremtros
+
+			try (ResultSet rs = pst.executeQuery()) {
 				
-		try(
-				Connection con =  ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(sql);
-		    ){
-			
-			
-			//TODO 1 mapear resto de campos
-			//TODO 2 Inner Join con Fabricante
-			//TODO 3 que funcione con todos los paremtros
-			
-			try( ResultSet rs = pst.executeQuery() ){
+				LOG.debug(pst);
 				
 				Producto p;
-				while( rs.next() ) {
-					
-					 p = new Producto();
-					 p.setId( rs.getInt("id"));
-					 p.setNombre( rs.getString("nombre"));
-					 p.setPrecio(rs.getFloat ("precio"));
-					 p.setDescripcion(rs.getString("descripcion"));
-					 
-					 Fabricante f=new Fabricante();
-					f.setId(rs.getInt ("id"));
+				while (rs.next()) {
+
+					p = new Producto();
+					p.setId(rs.getInt("id"));
+					p.setNombre(rs.getString("nombre"));
+					p.setPrecio(rs.getFloat("precio"));
+					p.setDescripcion(rs.getString("descripcion"));
+
+					Fabricante f = new Fabricante();
+					f.setId(rs.getInt("id"));
 					f.setNombre(rs.getString("Fabricante_nombre"));
-					
-					p.setFabricante(f);
-					
-					 resultado.add(p);
-					
+
+					p.setFabricante(f); // Hay que tener en cienta esto. se suele olvidar y es el que permite despues obtener los valores
+
+					resultado.add(p);
+
 				}
 			}
 		}
-		
+
 		return resultado;
 	}
 
-
-
-	public ArrayList<Producto> buscar(String string, int i, int j, int k) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }
-	
-	
-	
-	
-
