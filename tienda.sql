@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.30, for Linux (x86_64)
 --
--- Host: localhost    Database: UF2176-1
+-- Host: localhost    Database: tienda
 -- ------------------------------------------------------
 -- Server version	5.7.30-0ubuntu0.18.04.1
 
@@ -16,7 +16,7 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Current Database: `UF2176-1`
+-- Current Database: `tienda`
 --
 
 CREATE DATABASE /*!32312 IF NOT EXISTS*/ `tienda` /*!40100 DEFAULT CHARACTER SET utf8 */;
@@ -87,4 +87,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-07-02 11:36:38
+-- Dump completed on 2020-07-06 13:13:31
