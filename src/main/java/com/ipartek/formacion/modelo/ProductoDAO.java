@@ -44,13 +44,13 @@ public class ProductoDAO {
 		ArrayList<Producto> resultado = new ArrayList<Producto>();
 
 		String sql = " SELECT " + "    p.id as 'producto_id', p.nombre as 'producto_nombre', precio, descripcion, "
-				+ "    f.id 'fabricante_id', f.nombre 'fabricante_nombre'  " + " FROM "
-				+ "    productos p INNER JOIN fabricantes f ON p.id_fabricante = f.id ";
-
+				+ "    f.codigo 'fabricante_id', f.nombre 'fabricante_nombre'  " + " FROM "
+				+ "    productos p INNER JOIN Fabricantes f ON p.codigo_fabricante = f.codigo ";
+		
 		String where = " WHERE p.nombre LIKE '%" + nombreProducto + "%' ";
 
 		if (idFabricante > 0) {
-			where += " AND p.id_fabricante = " + idFabricante + " ";
+			where += " AND p.codigo_fabricante = " + idFabricante + " ";
 		}
 
 		if (precioMin >= 0 && precioMax > 0) {
@@ -93,7 +93,7 @@ public class ProductoDAO {
 	public ArrayList<Fabricante> getAllFabricantes(){
 		
 		ArrayList<Fabricante> resultado = new ArrayList<Fabricante>();
-		String sql = "SELECT id, nombre FROM fabricantes ORDER BY nombre DESC LIMIT 500; ";
+		String sql = "SELECT codigo, nombre FROM Fabricantes ORDER BY nombre DESC LIMIT 500; ";
 		
 		try( Connection con = ConnectionManager.getConnection();
 			 PreparedStatement pst = con.prepareStatement(sql);
@@ -104,7 +104,7 @@ public class ProductoDAO {
 			while( rs.next() ) {
 				
 				fab = new Fabricante();
-				fab.setId( rs.getInt("id"));
+				fab.setId( rs.getInt("codigo"));
 				fab.setNombre(rs.getString("nombre"));
 				resultado.add(fab);
 			}

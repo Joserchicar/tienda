@@ -4,21 +4,21 @@ import java.sql.ResultSet;
 
 public class Fabricante {
 
-	private int id;
+	private int codigo;
 	private String nombre;
 	
 	public Fabricante() {
 		super();
-		this.id = 0;
+		this.codigo = 0;
 		this.nombre = "";
 	}
 
 	public int getId() {
-		return id;
+		return codigo;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setId(int codigo) {
+		this.codigo = codigo;
 	}
 
 	public String getNombre() {
@@ -31,7 +31,7 @@ public class Fabricante {
 
 	@Override
 	public String toString() {
-		return "Fabricante [id=" + id + ", nombre=" + nombre + "]";
+		return "Fabricante [codigo=" + codigo + ", nombre=" + nombre + "]";
 	}
 	
 }
