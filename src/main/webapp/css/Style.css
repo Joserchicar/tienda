@@ -44,11 +44,30 @@ nav input[type="submit"] {
 	cursor: pointer;
 }
 
-nav input[type="submit"]:hover {
+ nav input[type="submit"]:hover {
 	background-color: #13C1AC;	
 	color: #FFF;	
 }
 
+.btn.btn-primary,
+.btn.btn-primary:hover,
+.btn.btn-primary:active,
+.btn.btn-primary:focus {
+	
+	background-color: #FFF;
+	border-color:#13C1AC;
+	border-radius:20px;
+	color:#13C1AC;
+	
+}
+
+/* Card 
+************/
+
+.card{
+	box-shadow: 4px 6px 0 0 #13C1AC;
+	
+}
 
 /*  card-content
 *****************************************/
@@ -57,8 +76,6 @@ nav input[type="submit"]:hover {
 	display: flex;
 	flex-wrap: wrap;	
 }
-
-
 
 .card-content .card {
 	width: 24%;
@@ -99,3 +116,14 @@ nav input[type="submit"]:hover {
 .input-group .form-control {
 	border-left: 0;	
 } 
+
+.form-inline [type="submit"] {
+
+    color: #13C1AC;
+	background-color: #FFF;
+	border-color: #13C1AC;
+	border-radius: 20px;
+	padding top 20px;
+	
+}
+	
